@@ -2,19 +2,18 @@ import Loading from '../components/Loading'
 import Error from '../components/Error'
 import { useProduct } from '../hooks/useProduct'
 import { useParams } from 'react-router-dom'
-
+import { mapError } from '../utils/ResponseError'
 
 export default function Product() {
-
   const { id } = useParams()
-  const { data, isError, isLoading } = useProduct(id)
+  const { data, isError, isLoading, error } = useProduct(id)
 
   return (
     <>
       <div className="mb-5">
         <h2 className="mb-5 text-xl">Product</h2>
       </div>
-      {isError ? (<Error msg={`Product not found`} />) :
+      {isError ? (<Error msg={mapError(error) || ''} />) :
         (isLoading ?
           <Loading /> :
           (

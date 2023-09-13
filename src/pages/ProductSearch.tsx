@@ -4,18 +4,18 @@ import Error from '../components/Error'
 import Loading from '../components/Loading'
 import ProductList from '../components/ProductList'
 import ProductSearchForm from '../components/ProductSearchForm'
-import { useMemo } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+
+const LIMIT = 20
 
 export default function ProductSearch() {
 
   const [params] = useSearchParams('q')
-  const searchText = params.get('q')
 
-  const { data, isError, isLoading, fetchNextPage, hasNextPage } = useProductSearch(searchText || '')
+  const searchText = params.get('q') ?? ''
 
-  const dataLength = useMemo(() => (data?.pages?.reduce((total, page) => total + page.products.length, 0) || 0), [data])
+  const { data, isError, isLoading, fetchNextPage, hasNextPage } = useProductSearch(searchText)
 
+  const hasMore = (data?.pages?.[0].total || 0) > LIMIT && !!hasNextPage
 
   return (
     <>
@@ -26,25 +26,13 @@ export default function ProductSearch() {
         </div>
       </div>
       {isError ? (
-        <Error msg={'Product list error'} />
+        <Error msg={'Searching product error'} />
       ) :
         (isLoading ? <Loading /> :
-          (<div>
-            {dataLength ? (
-              <InfiniteScroll
-                dataLength={dataLength}
-                next={() => fetchNextPage()}
-                hasMore={hasNextPage || false}
-                loader={<p className="text-center font-bold">Loading...</p>}
-                endMessage={<p className="text-center font-bold">Yay! You have seen it all</p>}
-              >
-                {data?.pages?.map((page, index) =>
-                  <ProductList key={index} products={page.products} />
-                )}
-              </InfiniteScroll>
-            ) : <div>No product found</div>}
-          </div>
-          ))}
+          (data?.pages?.[0].total ?
+            <ProductList data={data} hasMore={hasMore} fetchNextPage={fetchNextPage} /> :
+            <div>No product found</div>)
+        )}
     </>
   )
 }

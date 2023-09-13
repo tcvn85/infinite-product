@@ -1,3 +1,3 @@
-export const KEYS_PRODUCTS = 'products'
-export const KEYS_PRODUCT = 'product'
-export const KEYS_PRODUCTS_SEARCH = 'products-search'
+export const KEY_PRODUCTS = 'products'
+export const KEY_PRODUCT = 'product'
+export const KEY_PRODUCTS_SEARCH = 'products-search'

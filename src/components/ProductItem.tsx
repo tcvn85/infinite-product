@@ -15,7 +15,7 @@ export default function ProductItem({ product }: ProductItemProps) {
           <img src={thumbnail} alt={title} className="object-center w-full p-5 max-h-60" />
         </Link>
         <div className="px-4">
-          <h2 className="text-lg font-bold">{title}</h2>
+          <h2 className="text-lg font-bold leading-6 mb-2">{title}</h2>
           <div className="mb-5 text-green-800">Price: ${price}</div>
         </div>
       </div>
